@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Máy tính đẹp có lịch sử</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap");
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Quicksand", sans-serif;
+        background: linear-gradient(135deg, #a18cd1, #fbc2eb);
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px;
+        padding: 40px;
+        margin: 0;
+        min-height: 100vh;
+      }
+
+      .calculator {
+        background: #fff;
+        padding: 35px;
+        border-radius: 20px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        width: 340px;
+      }
+
+      #result {
+        width: 100%;
+        height: 50px;
+        font-size: 24px;
+        text-align: right;
+        padding: 10px;
+        border: none;
+        border-radius: 12px;
+        background: #f0f0f0;
+        margin-bottom: 15px;
+      }
+
+      .buttons {
+        display: grid;
+        grid-template-columns: repeat(4, 60px);
+        gap: 10px;
+      }
+
+      .buttons button {
+        height: 60px;
+        font-size: 20px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.2s;
+      }
+
+      /* Nút thường */
+      .buttons button:not(.operator):not(.equal):not(.clear) {
+        background-color: #f5f5f5;
+      }
+
+      .buttons button:not(.operator):not(.equal):not(.clear):hover {
+        background-color: #e0e0e0;
+      }
+
+      /* Nút phép toán */
+      .operator {
+        background-color: #ff9800;
+        color: #fff;
+      }
+
+      .operator:hover {
+        background-color: #fb8c00;
+      }
+
+      /* Nút "=" */
+      .equal {
+        background-color: #4caf50;
+        color: #fff;
+        grid-column: span 2;
+      }
+
+      .equal:hover {
+        background-color: #43a047;
+      }
+
+      /* Nút "C" */
+      .clear {
+        background-color: #f44336;
+        color: #fff;
+        grid-column: span 4;
+      }
+
+      .clear:hover {
+        background-color: #e53935;
+      }
+
+      .history {
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 20px;
+        padding: 20px;
+        width: 260px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
+      .history h3 {
+        margin-top: 0;
+        font-size: 20px;
+      }
+
+      .history ul {
+        list-style: none;
+        padding-left: 0;
+        margin-top: 10px;
+      }
+
+      .history li {
+        margin-bottom: 8px;
+        font-size: 16px;
+        border-bottom: 1px solid #ddd;
+        padding-bottom: 4px;
+      }
+
+      .clear-history {
+        font-size: 14px;
+        color: #d32f2f;
+        cursor: pointer;
+        margin-top: 10px;
+        display: inline-block;
+      }
+
+      @media (max-width: 70px) {
+        body {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .history {
+          margin-top: 30px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="calculator">
+      <input type="text" id="result" disabled />
+      <div class="buttons">
+        <button onclick="press('7')">7</button>
+        <button onclick="press('8')">8</button>
+        <button onclick="press('9')">9</button>
+        <button onclick="press('/') " class="operator">÷</button>
+
+        <button onclick="press('4')">4</button>
+        <button onclick="press('5')">5</button>
+        <button onclick="press('6')">6</button>
+        <button onclick="press('*') " class="operator">×</button>
+
+        <button onclick="press('1')">1</button>
+        <button onclick="press('2')">2</button>
+        <button onclick="press('3')">3</button>
+        <button onclick="press('-') " class="operator">−</button>
+
+        <button onclick="press('0')">0</button>
+        <button onclick="press('.')">.</button>
+        <button onclick="calculate()" class="equal">=</button>
+        <button onclick="press('+') " class="operator">+</button>
+
+        <button onclick="clearResult()" class="clear">C</button>
+      </div>
+    </div>
+
+    <div class="history">
+      <h3>Lịch sử</h3>
+      <ul id="history-list"></ul>
+      <span class="clear-history" onclick="clearHistory()">🗑️ Xóa lịch sử</span>
+    </div>
+
+    <script>
+      function press(value) {
+        document.getElementById("result").value += value;
+      }
+
+      function calculate() {
+        const input = document.getElementById("result").value;
+        try {
+          const result = eval(input);
+          document.getElementById("result").value = result;
+          saveToHistory(input, result);
+        } catch (e) {
+          document.getElementById("result").value = "Lỗi";
+        }
+      }
+
+      function clearResult() {
+        document.getElementById("result").value = "";
+      }
+
+      function saveToHistory(expression, result) {
+        const historyList = document.getElementById("history-list");
+        const newItem = document.createElement("li");
+        newItem.textContent = `${expression} = ${result}`;
+        historyList.prepend(newItem);
+      }
+
+      function clearHistory() {
+        document.getElementById("history-list").innerHTML = "";
+      }
+    </script>
+  </body>
+</html>
